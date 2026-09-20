@@ -1,0 +1,4 @@
+### GET request to example server
+GET http://localhost:8080/api/schedules/search?from=Karachi Cantt&to=Lahore Jn&date=2026-09-21
+
+###
