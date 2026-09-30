@@ -59,7 +59,6 @@ src/test/
 └── TicketBookingApplicationTests.java
 ```
 
-For a complete architecture and request-flow explanation, see [`explanation.md`](explanation.md) and [`process.md`](process.md).
 
 ## Prerequisites
 
