@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Booking MVP</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="container">
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">RAILWAY TICKETS</p>
+            <h1>Ticket Booking</h1>
+        </div>
+        <div id="userBox" class="user-box hidden"></div>
+    </header>
+
+    <section id="authPanel" class="card auth-grid">
+        <form id="loginForm">
+            <h2>Login</h2>
+            <label>Phone<input name="phone" required placeholder="03001234567"></label>
+            <label>Password<input name="password" type="password" required></label>
+            <button type="submit">Login</button>
+        </form>
+        <form id="registerForm">
+            <h2>Create account</h2>
+            <label>Name<input name="name" required></label>
+            <label>Phone<input name="phone" required></label>
+            <label>CNIC<input name="cnic" required placeholder="42101-1234567-1"></label>
+            <label>Email<input name="email" type="email"></label>
+            <label>Password<input name="password" type="password" required minlength="6"></label>
+            <button type="submit">Register</button>
+        </form>
+    </section>
+
+    <section id="appPanel" class="hidden">
+        <section id="adminPanel" class="card hidden">
+            <div class="section-heading"><div><p class="eyebrow">ADMIN</p><h2>Manage trains and schedules</h2></div><button id="adminRefreshButton" class="secondary">Refresh</button></div>
+            <div id="adminMessage" class="notice">Admin tools are restricted to ADMIN accounts.</div>
+            <form id="trainForm" class="admin-form">
+                <h3>Add train</h3>
+                <input name="trainNumber" placeholder="Train number e.g. 12DN" required>
+                <select name="name" required>
+                    <option value="">Select train name</option>
+                    <option>Green Line Express</option>
+                    <option>Karakoram Express</option>
+                    <option>Tezgam</option>
+                    <option>Pak Business Express</option>
+                    <option>Allama Iqbal Express</option>
+                    <option>Shah Hussain Express</option>
+                    <option>Karachi Express</option>
+                    <option>Khyber Mail</option>
+                    <option>Awam Express</option>
+                    <option>Jaffar Express</option>
+                    <option>Bolan Mail</option>
+                    <option>Rehman Baba Express</option>
+                    <option>Millat Express</option>
+                    <option>Sukkur Express</option>
+                </select>
+                <button type="submit">Create train</button>
+            </form>
+            <form id="scheduleForm" class="admin-form">
+                <h3>Add schedule</h3>
+                <select name="trainId" id="adminTrainSelect" required><option value="">Select train</option></select>
+                <select name="sourceCity" required>
+                    <option value="">From station</option>
+                    <option>Karachi Cantt</option>
+                    <option>Hyderabad Jn</option>
+                    <option>Rohri Jn</option>
+                    <option>Multan Cantt</option>
+                    <option>Bahawalpur</option>
+                    <option>Khanewal Jn</option>
+                    <option>Faisalabad</option>
+                    <option>Lahore Jn</option>
+                    <option>Rawalpindi</option>
+                    <option>Islamabad</option>
+                    <option>Peshawar Cantt</option>
+                    <option>Quetta</option>
+                </select>
+                <select name="destinationCity" required>
+                    <option value="">To station</option>
+                    <option>Karachi Cantt</option>
+                    <option>Hyderabad Jn</option>
+                    <option>Rohri Jn</option>
+                    <option>Multan Cantt</option>
+                    <option>Bahawalpur</option>
+                    <option>Khanewal Jn</option>
+                    <option>Faisalabad</option>
+                    <option>Lahore Jn</option>
+                    <option>Rawalpindi</option>
+                    <option>Islamabad</option>
+                    <option>Peshawar Cantt</option>
+                    <option>Quetta</option>
+                </select>
+                <input name="travelDate" type="date" required>
+                <input name="departureTime" type="time" required>
+                <input name="arrivalTime" type="time" required>
+                <input name="duration" id="adminDuration" placeholder="Calculated automatically" readonly>
+                <button type="submit">Create schedule</button>
+            </form>
+            <div id="adminSchedules" class="admin-list"></div>
+        </section>
+        <section class="card">
+            <div class="section-heading">
+                <div><p class="eyebrow">STEP 1</p><h2>Find a train</h2></div>
+                <button id="logoutButton" class="secondary">Logout</button>
+            </div>
+            <form id="searchForm" class="search-grid">
+                <label>From<select name="from" required>
+                    <option>Karachi Cantt</option><option>Hyderabad Jn</option><option>Rohri Jn</option>
+                    <option>Multan Cantt</option><option>Bahawalpur</option><option>Khanewal Jn</option>
+                    <option>Faisalabad</option><option>Lahore Jn</option><option>Rawalpindi</option>
+                    <option>Islamabad</option><option>Peshawar Cantt</option><option>Quetta</option>
+                </select></label>
+                <label>To<select name="to" required>
+                    <option>Lahore Jn</option><option>Karachi Cantt</option><option>Hyderabad Jn</option>
+                    <option>Rohri Jn</option><option>Multan Cantt</option><option>Bahawalpur</option>
+                    <option>Khanewal Jn</option><option>Faisalabad</option><option>Rawalpindi</option>
+                    <option>Islamabad</option><option>Peshawar Cantt</option><option>Quetta</option>
+                </select></label>
+                <label>Date<input name="date" type="date" required></label>
+                <button type="submit">Search trains</button>
+            </form>
+        </section>
+
+        <section id="results" class="card hidden">
+            <p class="eyebrow">STEP 2</p><h2>Choose class and seats</h2>
+            <div id="trainResults"></div>
+            <div id="seatPanel" class="hidden">
+                <div id="classChoices" class="choice-grid"></div>
+                <div id="seatGrid" class="seat-grid"></div>
+                <div class="seat-legend">
+                    <span><i class="legend available"></i>Available</span>
+                    <span><i class="legend selected"></i>Selected</span>
+                    <span><i class="legend locked"></i>Locked</span>
+                    <span><i class="legend booked"></i>Booked</span>
+                </div>
+                <button id="lockButton" disabled>Lock selected seats</button>
+            </div>
+        </section>
+
+        <section id="bookingPanel" class="card hidden">
+            <p class="eyebrow">STEP 3</p><h2>Passenger details</h2>
+            <p id="lockMessage" class="notice"></p>
+            <form id="bookingForm">
+                <div id="passengerFields"></div>
+                <button type="submit">Confirm booking</button>
+            </form>
+        </section>
+
+        <section id="confirmationPanel" class="card hidden">
+            <p class="eyebrow">STEP 4</p><h2>Booking confirmation</h2>
+            <div id="confirmation"></div>
+            <button id="payButton">Pay now (mock payment)</button>
+        </section>
+
+        <section class="card">
+            <div class="section-heading"><div><p class="eyebrow">ACCOUNT</p><h2>My bookings</h2></div><button id="historyButton" class="secondary">Refresh</button></div>
+            <div id="history"></div>
+        </section>
+    </section>
+    <div id="message" class="message hidden" role="alert" aria-live="assertive"></div>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>

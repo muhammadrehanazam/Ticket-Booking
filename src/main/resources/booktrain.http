@@ -1,4 +1,65 @@
-### GET request to example server
-GET http://localhost:8080/api/schedules/search?from=Karachi Cantt&to=Lahore Jn&date=2026-09-21
+### Register customer
+POST http://localhost:8080/api/users/register
+Content-Type: application/json
 
-###
+{
+  "name": "MVP User",
+  "phone": "03009998877",
+  "cnic": "42101-8888888-8",
+  "email": "mvp@example.com",
+  "password": "secret123"
+}
+
+### Login customer
+POST http://localhost:8080/api/users/login
+Content-Type: application/json
+
+{
+  "phone": "03009998877",
+  "password": "secret123"
+}
+
+### Search trains
+GET http://localhost:8080/api/schedules/search?from=Karachi%20Cantt&to=Lahore%20Jn&date=2026-09-21
+
+### Seat details
+GET http://localhost:8080/api/schedules/1/seats?coachClass=AC_BUSINESS
+
+### Lock selected seats for 10 minutes
+POST http://localhost:8080/api/seat-allocations/lock
+Content-Type: application/json
+
+{
+  "scheduleId": 1,
+  "seatIds": [11]
+}
+
+### Confirm booking (replace userId and lockToken)
+POST http://localhost:8080/api/bookings
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "scheduleId": 1,
+  "lockToken": "lock-token-from-previous-response",
+  "passengers": [
+    {
+      "passengerName": "Ali Khan",
+      "cnicOrBForm": "42101-1234567-1",
+      "age": 30,
+      "gender": "MALE"
+    }
+  ]
+}
+
+### Get booking by PNR
+GET http://localhost:8080/api/bookings/pnr/PNR-REPLACE-ME
+
+### Pay booking (mock payment)
+POST http://localhost:8080/api/bookings/1/pay
+
+### Booking history
+GET http://localhost:8080/api/bookings/user/1
+
+### Cancel booking
+POST http://localhost:8080/api/bookings/1/cancel

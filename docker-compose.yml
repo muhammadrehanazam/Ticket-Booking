@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: ticket-booking-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ticket_db
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-ChangeMe123!}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ticket-booking-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-ChangeMe123!}
+      DB_URL: ${DB_URL:-jdbc:mysql://db:3306/ticket_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+      JWT_SECRET: ${JWT_SECRET:-change-this-to-a-long-random-secret}
+      JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-86400000}
+      APP_ALLOWED_ORIGINS: ${APP_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+      SERVER_PORT: ${SERVER_PORT:-8080}
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mysql-data:

@@ -5,7 +5,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "seat_allocations")
+@Table(name = "seat_allocations", uniqueConstraints = {
+        @UniqueConstraint(name = "uk_schedule_seat", columnNames = {"schedule_id", "seat_id"})
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,6 +30,8 @@ public class SeatAllocation {
     // "AVAILABLE", "LOCKED", "BOOKED"
     private String status;
 
-    // Jab user seat par click karega to 10 min lock ka timer set hoga
+    @Column(length = 36)
+    private String lockToken;
+
     private LocalDateTime lockExpiryTime;
 }

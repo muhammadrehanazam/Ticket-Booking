@@ -4,6 +4,7 @@ import com.ticketbooking.model.*;
 import com.ticketbooking.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,9 +20,22 @@ public class DataInitializer implements CommandLineRunner {
     private final SeatRepository seatRepository;
     private final ScheduleRepository scheduleRepository;
     private final ClassFareRepository classFareRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
+        if (userRepository.findByPhone("03001234567").isEmpty()) {
+            userRepository.save(User.builder()
+                    .name("System Admin")
+                    .phone("03001234567")
+                    .cnic("42101-1234567-1")
+                    .email("admin@ticketbooking.com")
+                    .password(passwordEncoder.encode("Admin@123"))
+                    .role("ADMIN")
+                    .build());
+        }
+
         if (trainRepository.count() > 0) {
             return; // Data already loaded
         }

@@ -30,6 +30,7 @@ public class Booking {
     private String paymentStatus; // "PENDING", "PAID"
     private String bookingStatus; // "CONFIRMED", "CANCELLED"
     private LocalDateTime bookingTime;
+    private LocalDateTime paymentDeadline;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<Passenger> passengers = new ArrayList<>();
